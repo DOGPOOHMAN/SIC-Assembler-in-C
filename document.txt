@@ -4,7 +4,59 @@ School     :Feng-Chia-University
 Major      :Information Engineer and Computer Science
 Project    :2016/4/20
 
+
+---------------------- Abbreviations ------------------
+OPcoed     > operation code
+OPTAB      > operation code table
+LOCCTR     > location counter
+SYMTAB     > symble table
+Itmfile    > intermediate file
+PI         > pseudo instruction
+
 -------------------------------------------------------
 ------------------------- SIC -------------------------
 -------------------------------------------------------
 >>>>>>>>>>>>>>>>>>>>>>>> Pass1 <<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
+Read progarm content
+	When read "END" or EOF stop
+
+	Confirm LOCCTR starting value, by "START"
+		Y:use custom value
+		N:start at 0
+
+	
+	Read a line and translate an Itmfile
+		when confirm LOCCTR also fllow the steps that a cycle of read a line
+
+	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
+	1.read a word and confirm that it is a instruction in OPTAB and PI
+
+		Y:means this line had no Lable and doing
+			a.record it's OPcode
+			b.record LOCCTR and update LOCCTR vlaue
+			c.write these two vlaue into Itmfile
+
+		N:means had Lable
+			d.write Lable into SYMTAB_temp
+			
+
+	2.read second word if first word is Lable and 
+			e.do priveous a.b.c. steps
+
+	3.if assembly program had operands or comment(column 3 and 4) 
+			f.write operands into Itmfile_operands
+			g.write comment into Itmfile_comment
+
+Detail of priveous steps
+	a.
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>> Intermediate File <<<<<<<<<<<<<<<<<<<<<<<<
+Every Itmfile must have Line Number at front of line
+
+
+
