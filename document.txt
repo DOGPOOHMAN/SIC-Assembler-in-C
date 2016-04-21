@@ -34,7 +34,7 @@ Read progarm content
 	Read a line and translate to an Itmfile
 		when confirm LOCCTR also fllow the steps that a cycle of read a line
 
-	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
+	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<< 
 	1.read a word and confirm that it is a instruction in OPTAB and PI
 
 		Y:means this line had no Lable and doing
@@ -57,13 +57,23 @@ Read progarm content
 Detail of priveous steps
 
 a.
-read a line via fgets, analysis get Lable and OPcode by user input 
-lableWeight value 
+read a line via fgets, analysis get Lable and OPcode by lableWeight value of user input 
+
 
 
 
 >>>>>>>>>>>>>>>>>>>>>>>> Intermediate File <<<<<<<<<<<<<<<<<<<<<<<<
 Every Itmfile must have Line Number at front of line
 
+
+
+	>>>>>>>>>>>>>>>>> Itmfile formate <<<<<<<<<<<<<<<<<<<<<<
+
+	lineNumber  LOCCTR  OPcode(x10)   ObjectCode   Oprents  nixdpe
+	000         1000    18                         BUFFER   001000
+	001         1003    -1            454F46                      -->BYTE  C'EOF'
+	>>>>>>>>>>>>>>>>> Itmfile formate <<<<<<<<<<<<<<<<<<<<<<
+
+opcode -1 means pseudo instruction
 
 
