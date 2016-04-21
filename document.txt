@@ -18,7 +18,10 @@ PI         > pseudo instruction
 -------------------------------------------------------
 >>>>>>>>>>>>>>>>>>>>>>>> Pass1 <<<<<<<<<<<<<<<<<<<<<<<<
 
-
+Need user input 
+1.lableWide
+2.opcoedWide
+3.oprentWide
 
 Read progarm content
 	When read "END" or EOF stop
@@ -28,7 +31,7 @@ Read progarm content
 		N:start at 0
 
 	
-	Read a line and translate an Itmfile
+	Read a line and translate to an Itmfile
 		when confirm LOCCTR also fllow the steps that a cycle of read a line
 
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
@@ -49,9 +52,13 @@ Read progarm content
 	3.if assembly program had operands or comment(column 3 and 4) 
 			f.write operands into Itmfile_operands
 			g.write comment into Itmfile_comment
+	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
 
 Detail of priveous steps
-	a.
+
+a.
+read a line via fgets, analysis get Lable and OPcode by user input 
+lableWeight value 
 
 
 
