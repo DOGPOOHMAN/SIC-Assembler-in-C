@@ -67,20 +67,28 @@ Every Itmfile must have Line Number at front of line
 
 
 
-	>>>>>>>>>>>>>>>>> Itmfile formate <<<<<<<<<<<<<<<<<<<<<<
+	>>>>>>>>>>>>>>>>> Itmfile formate1 <<<<<<<<<<<<<<<<<<<<<<
+	LineNumber  LOCCTR  OPcode(x10) ArraySubscript  n i x d p e   Oprents    ObjectCode   
+	000         1000    18          0               0-0-1-0-0-0   BUFFER   
+	005         1003    -1          3                                        454F46     
+	010         FFFF    <    OPcode not exist    >
+	>>>>>>>>>>>>>>>>> Itmfile formate1 <<<<<<<<<<<<<<<<<<<<<<
+
+
+	>>>>>>>>>>>>>>>>> Itmfile formate2 <<<<<<<<<<<<<<<<<<<<<<
 	Program-name	    COPY
 	Program-in-memory   1000
 	Program-length      250
 	Program-start       1000
-	
 
-	LineNumber  LOCCTR  OPcode(x10) ArraySubscript  n i x d p e   Oprents    ObjectCode   
-	000         1000    18          0               0-0-1-0-0-0   BUFFER   
-	001         1003    -1          3                                        454F46     
-
+	SYMTABLE
+	BUFFER              2111
+	ALPHA               2645
+	SYMTABLE
+	>>>>>>>>>>>>>>>>> Itmfile formate2 <<<<<<<<<<<<<<<<<<<<<<
 
 	  
-	>>>>>>>>>>>>>>>>> Itmfile formate <<<<<<<<<<<<<<<<<<<<<<
+	
 
 opcode -1 means pseudo instruction BYTE WORD START END RESB RESW
 read opcode as int, if we need init Code-Object transform int to unsigned
