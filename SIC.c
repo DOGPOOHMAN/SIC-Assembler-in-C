@@ -1,21 +1,6 @@
+#include "pgrmhead.c"
 #include "sic_sicxe_tables.c"
 #include "sic_open_sicpgrm.c"
-
-#ifndef H_STRING
-	#include <string.h>
-#endif
-
-#ifndef H_STDLIB
-	#include <stdlib.h>
-#endif
-
-#ifndef TRUE
-	#define TRUE 1
-#endif
-
-#ifndef FALSE
-	#define FALSE 0 
-#endif
 
 #define DEBUG
 

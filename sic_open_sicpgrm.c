@@ -1,14 +1,3 @@
-#ifndef H_STDIO
-	#include <stdio.h>
-#endif
-
-#ifndef TRUE
-	#define TRUE 1
-#endif
-
-#ifndef FALSE
-	#define FALSE 0 
-#endif
 
 FILE * pass1_open_sicpgrm(void){
 	char fileName[20];

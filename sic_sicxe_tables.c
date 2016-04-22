@@ -1,7 +1,3 @@
-#ifndef H_STRING
-	#include <string.h>
-#endif
-
 #define OPTABLE_WIDE      59
 #define PSEUDO_INS_WIDE   6
 
