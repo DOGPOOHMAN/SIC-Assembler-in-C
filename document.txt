@@ -69,11 +69,14 @@ Every Itmfile must have Line Number at front of line
 
 	>>>>>>>>>>>>>>>>> Itmfile formate <<<<<<<<<<<<<<<<<<<<<<
 
-	lineNumber  LOCCTR  OPcode(x10)   ObjectCode   Oprents  nixdpe
-	000         1000    18                         BUFFER   001000
-	001         1003    -1            454F46                      -->BYTE  C'EOF'
+	lineNumber  LOCCTR  OPcode(x10)  n i x d p e   Oprents    ObjectCode   
+	000         1000    18           0-0-1-0-0-0   BUFFER   
+	001         1003    -1                                    454F46       
 	>>>>>>>>>>>>>>>>> Itmfile formate <<<<<<<<<<<<<<<<<<<<<<
 
-opcode -1 means pseudo instruction
+opcode -1 means pseudo instruction BYTE WORD START END RESB RESW
+read opcode as int, if we need init Code-Object transform int to unsigned
+use scanf("%d%*c%d%*c%d...") read nixdpe
+
 
 
