@@ -2,19 +2,40 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#define TRUE   1
-#define FALSE  0
+#ifndef TRUE
+	#define TRUE 1
+#endif
+
+#ifndef FALSE
+	#define FALSE 0 
+#endif
 
 
-FILE * open_file(void);
+FILE * open_file(void);//open a sic program
+void pass1_reading(void);
+
 
 int main(void){
 	
-	FILE * sicFile;
-	sicFile = open_file();
+	//open sic program file
+	static FILE * sicPgrm;
+	sicPgrm = open_file();
+	
+	//starting read file
+	unsigned locctr   =  0;
+	unsigned lineNum  =  0;
+	short lableWide   =  8;
+	short opcodeWide  =  8;
+	short oprentWide  =  8;
+	
+	
+	
 	
 	return 0;
 }
+
+
+
 
 FILE * open_file(void){
 	char fileName[20];
@@ -40,6 +61,6 @@ FILE * open_file(void){
 		}
 	}//end of while
 	
-	 return fileStream;
+	return fileStream;
 }//end of open_file function
 
