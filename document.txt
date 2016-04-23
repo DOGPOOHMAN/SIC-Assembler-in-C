@@ -3,7 +3,9 @@ Email      :li.dogpooh@gmail.com
 School     :Feng-Chia-University
 Major      :Information Engineer and Computer Science
 Project    :2016/4/20
-
+About      :This SIC and SIC/XE Assembly program can prevent develop 
+            making mistake, but it can't prevent who want to crash this
+            program deliberately.
 
 ---------------------- Abbreviations ------------------
 OPcoed     > operation code
@@ -17,83 +19,78 @@ PI         > pseudo instruction
 ------------------------- SIC -------------------------
 -------------------------------------------------------
 >>>>>>>>>>>>>>>>>>>>>>>> Pass1 <<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>>>>>>>>>>>>>>>>>>>> Pass1 <<<<<<<<<<<<<<<<<<<<<<<<
 
-Need user input 
-1.lableWide
-2.opcoedWide
-3.oprentWide
+1.Need user input 
+	1.lableWide
+	2.opcoedWide
 
-Read progarm content
-	When read "END" or EOF stop
+2.Read progarm content
+	1.When read "END" or EOF stop
 
-	Confirm LOCCTR starting value, by "START"
+	2.Confirm LOCCTR starting value, by "START"
 		Y:use custom value
 		N:start at 0
 
 	
-	Read a line and translate to an Itmfile
+	3.Read a line and translate to an Itmfile
 		when confirm LOCCTR do not fllow the steps that a cycle of read a line
 
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<< 
-	1.read a word and confirm that it is a instruction in OPTAB and PI
+	1.read a line (fgets)
+	2.if it is comment line drop it,but fragment this line to three part
+		1.Lable (default 8 character)
+			a.write Lable into Itmfile2 include Lable name and LOCCTR to
+			  creat a SYMTABLE
 
-		Y:means this line had no Lable and doing
-			a.record it's OPcode
-			b.record LOCCTR and update LOCCTR vlaue
-			c.write these two vlaue into Itmfile
-
-		N:means had Lable
-			d.write Lable into SYMTAB_temp
-			
-
-	2.read second word if first word is Lable and 
-			e.do priveous a.b.c. steps
-
-	3.if assembly program had operands or comment(column 3 and 4) 
-			f.write operands into Itmfile_operands
-			g.write comment into Itmfile_comment
+		2.OPcode or PI (default 8 character)
+			b.find opcode and increse LOCCTR by format type(ex: ADD +3)
+			c.increse LOCCTR by PI and user code(ex:RESB 4096 +1000)
+			d.every PI had own function
+			e.sepcial case: OPcode RESB 
+		
+		3.Operands
+			f.each OPcode or PI had own function to process operands
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
 
-Detail of priveous steps
-
-a.
-read a line via fgets, analysis get Lable and OPcode by lableWeight value of user input 
 
 
 
 
 >>>>>>>>>>>>>>>>>>>>>>>> Intermediate File <<<<<<<<<<<<<<<<<<<<<<<<
-Every Itmfile must have Line Number at front of line
+>>>>>>>>>>>>>>>>>>>>>>>> Intermediate File <<<<<<<<<<<<<<<<<<<<<<<<
 
-
-
-	>>>>>>>>>>>>>>>>> Itmfile formate1 <<<<<<<<<<<<<<<<<<<<<<
+	>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Itmfile formate1 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	LineNumber  LOCCTR  OPcode(x10) ArraySubscript  n i x d p e   Oprents    ObjectCode   
 	000         1000    18          0               0-0-1-0-0-0   BUFFER   
 	005         1003    -1          3                                        454F46     
-	010         FFFF    <    OPcode not exist    >
-	>>>>>>>>>>>>>>>>> Itmfile formate1 <<<<<<<<<<<<<<<<<<<<<<
+	010         FFFF    < -Hello-  OPcode not exist    >    <code :ALPHA   Hello   BUFFER,X>
+	015         FFFF    < -ALPHA-  Lable had been use >     <code :ALPHA   LDA     BUFFER,X>
+	>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Itmfile formate1 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 	>>>>>>>>>>>>>>>>> Itmfile formate2 <<<<<<<<<<<<<<<<<<<<<<
+	SYMTABLE
+	BUFFER              2111
+	ALPHA               2645
+	SYMTABLE	
+
+	Program-able-run    NO
 	Program-name	    COPY
 	Program-in-memory   1000
 	Program-length      250
 	Program-start       1000
-
-	SYMTABLE
-	BUFFER              2111
-	ALPHA               2645
-	SYMTABLE
 	>>>>>>>>>>>>>>>>> Itmfile formate2 <<<<<<<<<<<<<<<<<<<<<<
 
 	  
 	
+Details:
 
-opcode -1 means pseudo instruction BYTE WORD START END RESB RESW
-read opcode as int, if we need init Code-Object transform int to unsigned
-use scanf("%d%*c%d%*c%d...") read nixdpe
-when read "." means this line is comment and drop it
+1.opcode -1 means pseudo instruction BYTE WORD START END RESB RESW
+2.read opcode as int, if we need init Code-Object transform int to unsigned
+3.use scanf("%d%*c%d%*c%d...") read nixdpe
+4.when read "." means this line is comment and drop it
+
 
 
 
