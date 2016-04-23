@@ -1,4 +1,8 @@
 #include "sic_build_itmfile_functions.c"
+
+//let code look nice and clean
+#define L &lines
+
 #define DEBUG
 short pass1_built_itmfile(FILE * sicPgrm){
 	//store the character of read line
@@ -28,14 +32,39 @@ short pass1_built_itmfile(FILE * sicPgrm){
 	
 	
 	/* user setting program format */
-	pass1_set_pgrmformat(&lines);
+	pass1_set_pgrmformat(L);
 
 	#ifdef DEBUG
 	printf("labWide %u\n", lines.labWide);
 	printf("codWide %u\n", lines.codWide);
 	#endif
 
-//	/* starting reading program*/
+	/* starting reading program content */
+	while(stopReadFlag == FALSE){
+		//clean char array
+		pass1_init_line(L);
+		
+		//read a line from program
+		if(fgets(lines.all, ALL_LEN - 1, sicPgrm) == NULL){
+			stopReadFlag = TRUE;
+		}
+		else{
+			/*if it is comment line drop it,but 
+			  fragment this line to three part*/
+			if(pass1_isit_comment(L) == TRUE){
+				continue;
+			}
+			else{
+				printf("%s--\n", lines.all);
+			}
+				
+		}
+		
+	}//end of while
+	
+	
+//	
+//	
 //	//read program name
 //	fscanf(sicPgrm, "%s", pgrmName);
 //	
@@ -72,10 +101,7 @@ short pass1_built_itmfile(FILE * sicPgrm){
 //	}
 //	
 //	
-//	/* read program content */
-//	while(stopReadFlag == FALSE){
-//		stopReadFlag = TRUE;
-//	}//end of while
+//	
 	
 	return errorFlag;
 }//end of pass1_built_itmfile function

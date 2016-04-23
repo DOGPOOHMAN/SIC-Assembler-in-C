@@ -1,14 +1,54 @@
+#define ALL_LEN      61
+#define LABLE_LEN    16
+#define CODE_LEN     16
+#define OPRENT_LEN   16
+
 typedef struct line{
 	//sic program format
 	unsigned labWide;//column wide of lable
 	unsigned codWide;//column wide of opcode
 	
-	char all   [60];
-	char lable [16];
-	char code  [16];
-	char oprent[16];
+	char all   [ ALL_LEN    ];
+	char lable [ LABLE_LEN  ];
+	char code  [ CODE_LEN   ];
+	char oprent[ OPRENT_LEN ];
 } Line;
 
+void pass1_init_line(Line * l){
+	strcpy(l->all,    "");
+	strcpy(l->lable,  "");
+	strcpy(l->code,   "");
+	strcpy(l->oprent, "");
+}//end of pass1_init_line function
+
+short pass1_isit_comment(Line * l){
+	short isCommentFalg;
+	unsigned wide = l->labWide;
+
+  /* two type of write comment
+    RETADR	LDA	THREE
+  			.
+			.	COMMENT
+	LENGTH	RESW	1
+	BUFFER	RESB	4096
+	.
+	.	COMMENT
+	RDREC	LDX	ZERO*/
+
+	if( (l->all[ 0 ] == '.') || (l->all[ wide + 1 ] == '.')){
+		isCommentFalg = TRUE;
+	}	
+	else{
+		isCommentFalg = FALSE;
+	}
+	
+	return isCommentFalg;
+}//end of pass1_isit_comment function
+
+void pass1_frag_to3part(Line * l){
+
+
+}//end of pass1_frag_to3part function
 
 void pass1_set_pgrmformat(Line * l){
 	char choice;
@@ -68,12 +108,7 @@ void pass1_set_pgrmformat(Line * l){
 
 
 
-void pass1_init_line(Line * l){
-	strcpy(l->all,    "");
-	strcpy(l->lable,  "");
-	strcpy(l->code,   "");
-	strcpy(l->oprent, "");
-}
+
 
 //short pass1_is_comment()
 //
