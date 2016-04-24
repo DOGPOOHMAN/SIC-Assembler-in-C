@@ -10,7 +10,7 @@ int main(void){
 	static FILE * sicPgrm;
 	sicPgrm = pass1_open_sicpgrm();
 	
-	pass1_built_itmfile( &(*sicPgrm) );
+	pass1_built_itmfile( sicPgrm );
 	
 	
 	

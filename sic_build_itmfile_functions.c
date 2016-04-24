@@ -1,17 +1,17 @@
-#define ALL_LEN      61
-#define LABLE_LEN    16
-#define CODE_LEN     16
-#define OPRENT_LEN   16
+#define ALL_LEN      60
+#define LABLE_LEN    15
+#define CODE_LEN     15
+#define OPRENT_LEN   15
 
 typedef struct line{
 	//sic program format
 	unsigned labWide;//column wide of lable
 	unsigned codWide;//column wide of opcode
 	
-	char all   [ ALL_LEN    ];
-	char lable [ LABLE_LEN  ];
-	char code  [ CODE_LEN   ];
-	char oprent[ OPRENT_LEN ];
+	char all   [ ALL_LEN    + 1 ];//pluse one for '\0'
+	char lable [ LABLE_LEN  + 1 ];
+	char code  [ CODE_LEN   + 1 ];
+	char oprent[ OPRENT_LEN + 1 ];
 } Line;
 
 void pass1_init_line(Line * l){
@@ -26,6 +26,7 @@ short pass1_isit_comment(Line * l){
 	unsigned wide = l->labWide;
 
   /* two type of write comment
+
     RETADR	LDA	THREE
   			.
 			.	COMMENT
@@ -84,6 +85,7 @@ void pass1_set_pgrmformat(Line * l){
 			
 			if(choice == 'y')
 			{
+				/* to advoid long if-express so divided into two part */
 				if( (tempLabWide <= 15) && (tempCodWide <= 15) ){
 					if( (tempLabWide >= 8) && (tempCodWide >= 8) ){
 						
@@ -100,7 +102,10 @@ void pass1_set_pgrmformat(Line * l){
 					puts("Maximum wide of Lable and Opcode is [15]");
 					puts("Minimum wide of Lable and Opcode is [08]");
 				}
-			} 
+			}
+			else{
+				/* let user setting againt */;
+			}
 		}//end of while
 	}//end of if
 

@@ -1,6 +1,12 @@
+/* This function (pass1_built_itmfile()) provide a platform for
+   read user's sic program and build itmfile functions, this function also integrate
+   variable which used by read and build itmfile, so these variable and functions
+   didn't put into main function, let the code looks nice and clean.
+*/
+
 #include "sic_build_itmfile_functions.c"
 
-//let code look nice and clean
+//this define purpose is that let the code looks nice and clean
 #define L &lines
 
 #define DEBUG
@@ -31,7 +37,8 @@ short pass1_built_itmfile(FILE * sicPgrm){
 	strcpy(temp, "");
 	
 	
-	/* user setting program format */
+	/* user setting program format
+	   setting column wide of lable and opcode*/
 	pass1_set_pgrmformat(L);
 
 	#ifdef DEBUG
@@ -45,7 +52,7 @@ short pass1_built_itmfile(FILE * sicPgrm){
 		pass1_init_line(L);
 		
 		//read a line from program
-		if(fgets(lines.all, ALL_LEN - 1, sicPgrm) == NULL){
+		if(fgets(lines.all, ALL_LEN, sicPgrm) == NULL){
 			stopReadFlag = TRUE;
 		}
 		else{
@@ -58,7 +65,7 @@ short pass1_built_itmfile(FILE * sicPgrm){
 				printf("%s--\n", lines.all);
 			}
 				
-		}
+		}//end of if(fgets)
 		
 	}//end of while
 	
