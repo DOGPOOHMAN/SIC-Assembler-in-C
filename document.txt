@@ -39,11 +39,11 @@ PI         > pseudo instruction
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<< 
 	1.read a line (fgets)
 	2.if it is comment line drop it,but fragment this line to three part
-		1.Lable (default 8 character)
+		1.Lable (default 8 character string)
 			a.write Lable into Itmfile2 include Lable name and LOCCTR to
 			  creat a SYMTABLE
 
-		2.OPcode or PI (default 8 character)
+		2.OPcode or PI (default 8 character string)
 			b.find opcode and increse LOCCTR by format type(ex: ADD +3)
 			c.increse LOCCTR by PI and user code(ex:RESB 4096 +1000)
 			d.every PI had own function
@@ -52,7 +52,21 @@ PI         > pseudo instruction
 		3.Operands
 			f.each OPcode or PI had own function to process operands
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
+	Pseudo code
+        	fragment a line to 3part, and set flag()
+			if fragment fail throw a error infor
+		if had lable(check out flag)
 
+			insert lable
+			if lable had exist throght a error infor
+		if had opcode(check out flag)
+
+			search code get a key value
+			Y:exist code
+				read oprent
+				processing as key value
+			N:throght a error infor on screen and in Itmfile
+	1.error infor is a string like java exception had a string memeber
 
 
 
