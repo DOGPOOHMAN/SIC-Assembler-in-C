@@ -5,6 +5,7 @@
 */
 
 #include "sic_build_itmfile_functions.c"
+#include "sic_set_format_wide.c"
 
 //this define purpose is that let the code looks nice and clean
 #define L &lines
@@ -39,7 +40,7 @@ short pass1_built_itmfile(FILE * sicPgrm){
 	
 	/* user setting program format
 	   setting column wide of lable and opcode*/
-	pass1_set_pgrmformat(L);
+	pass1_set_format_wide(L);
 
 	#ifdef DEBUG
 	printf("labWide %u\n", lines.labWide);
