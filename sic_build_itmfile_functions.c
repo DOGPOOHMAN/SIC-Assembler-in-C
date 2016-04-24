@@ -4,10 +4,6 @@
 #define OPRENT_LEN   15
 
 typedef struct line{
-	//sic program format
-	unsigned labWide;//column wide of lable
-	unsigned codWide;//column wide of opcode
-	
 	char all   [ ALL_LEN    + 1 ];//pluse one for '\0'
 	char lable [ LABLE_LEN  + 1 ];
 	char code  [ CODE_LEN   + 1 ];
@@ -31,20 +27,19 @@ void pass1_init_line(Line * l){
 
 short pass1_isit_comment(Line * l){
 	short isCommentFalg;
-	unsigned wide = l->labWide;
 
   /* two type of write comment
 
     RETADR	LDA	THREE
-  			.
-			.	COMMENT
+  	<tab>   .
+	<tab>	.	COMMENT
 	LENGTH	RESW	1
 	BUFFER	RESB	4096
 	.
 	.	COMMENT
 	RDREC	LDX	ZERO*/
 
-	if( (l->all[ 0 ] == '.') || (l->all[ wide + 1 ] == '.')){
+	if( (l->all[ 0 ] == '.') || (l->all[ 1 ] == '.')){
 		isCommentFalg = TRUE;
 	}	
 	else{

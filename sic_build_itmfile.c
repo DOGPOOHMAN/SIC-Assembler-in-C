@@ -5,7 +5,6 @@
 */
 
 #include "sic_build_itmfile_functions.c"
-#include "sic_set_format_wide.c"
 
 //this define purpose is that let the code looks nice and clean
 #define L &lines
@@ -14,11 +13,6 @@
 short pass1_built_itmfile(FILE * sicPgrm){
 	//store the character of read line
 	Line lines;
-	
-	//sic program format
-	lines.labWide   =  8;//column wide of lable
-	lines.codWide   =  8;//column wide of opcode
-
 	
 	//program infor
 	char     pgrmName [20];
@@ -34,19 +28,9 @@ short pass1_built_itmfile(FILE * sicPgrm){
 	short stopReadFlag=  FALSE;
 	
 	//init variable
-	strcpy(pgrmName, "");
-	strcpy(temp, "");
+	memset(pgrmName,   '\0', sizeof(pgrmName));
+	memset(temp,       '\0', sizeof(temp));
 	
-	
-	/* user setting program format
-	   setting column wide of lable and opcode*/
-	pass1_set_format_wide(L);
-
-	#ifdef DEBUG
-	printf("labWide %u\n", lines.labWide);
-	printf("codWide %u\n", lines.codWide);
-	#endif
-
 	/* starting reading program content */
 	while(stopReadFlag == FALSE){
 		//clean char array
@@ -63,8 +47,9 @@ short pass1_built_itmfile(FILE * sicPgrm){
 				continue;
 			}
 			else{
-				printf("%s--\n", lines.all);
-				pass1_divi_in3part(L);
+				puts(lines.all);
+//				printf("%s--\n", lines.all);
+//				pass1_divi_in3part(L);
 			}
 				
 		}//end of if(fgets)
