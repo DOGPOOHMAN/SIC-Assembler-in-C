@@ -38,7 +38,7 @@ PI         > pseudo instruction
 
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<< 
 	1.read a line (fgets)
-	2.if it is comment line drop it,but fragment this line to three part
+	2.if it is comment line drop it,but divided this line to three part
 		1.Lable (default 8 character string)
 			a.write Lable into Itmfile2 include Lable name and LOCCTR to
 			  creat a SYMTABLE
@@ -53,8 +53,8 @@ PI         > pseudo instruction
 			f.each OPcode or PI had own function to process operands
 	>>>>>>>>>>>>>>>>> A cycle of read a line <<<<<<<<<<<<<<<<<<<<<<
 	Pseudo code
-        	fragment a line to 3part, and set flag()
-			if fragment fail throw a error infor
+        	divided a line to 3part, and set flag()
+			if divided fail throw a error infor
 		if had lable(check out flag)
 
 			insert lable

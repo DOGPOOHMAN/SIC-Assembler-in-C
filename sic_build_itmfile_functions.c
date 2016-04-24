@@ -12,13 +12,21 @@ typedef struct line{
 	char lable [ LABLE_LEN  + 1 ];
 	char code  [ CODE_LEN   + 1 ];
 	char oprent[ OPRENT_LEN + 1 ];
+	
+	short lableFlag;
+	short codeFlag;
+	short oprentlag;
 } Line;
 
 void pass1_init_line(Line * l){
-	strcpy(l->all,    "");
-	strcpy(l->lable,  "");
-	strcpy(l->code,   "");
-	strcpy(l->oprent, "");
+	memset(l->all,   '\0', sizeof(l->all));
+	memset(l->lable, '\0', sizeof(l->lable));
+	memset(l->code,  '\0', sizeof(l->code));
+	memset(l->oprent,'\0', sizeof(l->oprent));
+	
+	l->lableFlag  = FALSE;
+	l->codeFlag   = FALSE;
+	l->oprentlag  = FALSE;
 }//end of pass1_init_line function
 
 short pass1_isit_comment(Line * l){
@@ -46,8 +54,10 @@ short pass1_isit_comment(Line * l){
 	return isCommentFalg;
 }//end of pass1_isit_comment function
 
-void pass1_divi_to3part(Line * l){
-
+void pass1_divi_in3part(Line * l){
+	unsigned length = strlen(l->all);
+	
+	printf("len:%u\n", length);
 
 }//end of pass1_frag_to3part function
 

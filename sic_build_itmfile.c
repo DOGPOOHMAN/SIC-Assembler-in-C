@@ -64,6 +64,7 @@ short pass1_built_itmfile(FILE * sicPgrm){
 			}
 			else{
 				printf("%s--\n", lines.all);
+				pass1_divi_in3part(L);
 			}
 				
 		}//end of if(fgets)
