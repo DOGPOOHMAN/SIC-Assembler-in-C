@@ -16,7 +16,25 @@ typedef struct line{
 	//store error message
 	char * eroMesg;
 	
+
+	/*16 bit 0000 0000 0000 0000
+	    	  ^^^ ^^^^ ^^^^ ^^^^ */
+	unsigned locctr       : 16;
+	
+	/*8 bit 0000 0000
+	               ni*/
+	unsigned opCode       : 8;
+	
+	unsigned subscript;
+	
+	/* BYTE C'EOF' will be use*/
+	char *   objcode;
+	
+	
 } Line;
+
+
+
 
 Line * pass1_init_line(char * allLine){
 	Line * temp =  NULL;
@@ -32,8 +50,17 @@ Line * pass1_init_line(char * allLine){
 	temp->oprent   = NULL;
 	temp->eroMesg  = NULL;
 	
+	//for record Itmfile Result
+	temp->locctr    = 0;
+	temp->opCode    = 0;
+	temp->subscript = 0;
+	temp->objcode   = NULL;
+	
 	return temp;
 }//end of pass1_init_line function
+
+
+
 
 void pass1_delete_line(Line * l){
 	if(l->all != NULL)
@@ -51,9 +78,15 @@ void pass1_delete_line(Line * l){
 	if(l->eroMesg != NULL)
 		free(l->eroMesg);
 		
+	if(l->objcode != NULL)
+		free(l->objcode);
+		
 	free(l);	
 
 }//end of pass1_init_line function
+
+
+
 
 short pass1_isit_comment(char * allLine){
 	short isCommentFalg;
@@ -78,6 +111,9 @@ short pass1_isit_comment(char * allLine){
 	
 	return isCommentFalg;
 }//end of pass1_isit_comment function
+
+
+
 
 void pass1_divi_in3part(Line * l){
 

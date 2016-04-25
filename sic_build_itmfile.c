@@ -70,25 +70,22 @@ void pass1_built_itmfile(FILE * sicPgrm){
 			
 			pass1_divi_in3part(L);
 			
+			#ifdef DEBUG
 			if(L->eroMesg != NULL){
 				puts(L->eroMesg);
 			}
 			else{
-				
-				#ifdef DEBUG
 				printf("lable:%s\n", L->lable);
 				printf("code:%s\n", L->code);
 				printf("oprent:%s\n\n", L->oprent);
-				#endif
 			}
+			#endif
 			
-				
-				
-		
-				
 		}//end of if(fgets)
 		
 	}//end of while
+	
+	
 	
 	#ifdef DEBUG
 	printf("count:%d\n", count);
