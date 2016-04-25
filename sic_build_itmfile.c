@@ -6,13 +6,15 @@
 
 #include "sic_build_itmfile_functions.c"
 
-//this define purpose is that let the code looks nice and clean
-#define L &lines
+#define LINES_LEN 100
 
-//#define DEBUG
-short pass1_built_itmfile(FILE * sicPgrm){
-	//store the character of read line
-	Line lines;
+#define DEBUG
+void pass1_built_itmfile(FILE * sicPgrm){
+	//store the intermediate file infor
+	Line * Lines[ LINES_LEN ];
+	
+	//store the malloc struct of line
+	Line * L;
 	
 	//program infor
 	char     pgrmName [20];
@@ -20,54 +22,90 @@ short pass1_built_itmfile(FILE * sicPgrm){
 	
 	
 	//will change in processing
-	char temp[10];
+	
+	//store the character of read line
+	char     allLine  [ ALL_LEN + 1 ];
 	unsigned nowLoc   =  0;
+	unsigned count    =  0;
 
 
 	short errorFlag   =  FALSE;
 	short stopReadFlag=  FALSE;
 	
-	//init variable
-	memset(pgrmName,   '\0', sizeof(pgrmName));
-	memset(temp,       '\0', sizeof(temp));
+	//init array as "\0\0\0\0\0\0....."
+	memset(pgrmName,  '\0', sizeof(pgrmName));
+	//init array as NULL, NULL, .....
+	memset(Lines,        0, sizeof(Lines));
 	
 	/* starting reading program content */
 	while(stopReadFlag == FALSE){
-		//clean char array
-		pass1_init_line(L);
+		
+		//init variable
+		memset(allLine,'\0', sizeof(allLine));
+		L = NULL;
+		
+		
+		/* if pass checking then start init*/
 		
 		//read a line from program
-		if(fgets(lines.all, ALL_LEN, sicPgrm) == NULL){
+		if(fgets(allLine, ALL_LEN, sicPgrm) == NULL){
 			stopReadFlag = TRUE;
+			continue;
+		}
+		/*if it is comment line drop it,but 
+		divided this line to three part*/
+		else if(pass1_isit_comment(allLine) == TRUE){
+			continue;
 		}
 		else{
-			/*if it is comment line drop it,but 
-			  fragment this line to three part*/
-			if(pass1_isit_comment(L) == TRUE){
-				continue;
+			#ifdef DEBUG
+			puts(allLine);
+			#endif
+			
+			//init struct line object
+			L = pass1_init_line(allLine);
+			//store this line object
+			Lines[count] = L;
+			count++;
+			
+			pass1_divi_in3part(L);
+			
+			if(L->eroMesg != NULL){
+				puts(L->eroMesg);
 			}
 			else{
-				puts(lines.all);
-				pass1_divi_in3part(L);
 				
-				if(lines.eroFlag == TRUE){
-					puts(lines.eroMesg);
-				}
-				else{
-					
-					#ifdef DEBUG
-					printf("lable:%s\n", lines.lable);
-					printf("code:%s\n", lines.code);
-					printf("oprent:%s\n", lines.oprent);
-					#endif
-				}
-				
-				
-				
+				#ifdef DEBUG
+				printf("lable:%s\n", L->lable);
+				printf("code:%s\n", L->code);
+				printf("oprent:%s\n\n", L->oprent);
+				#endif
 			}
+			
+				
+				
+		
 				
 		}//end of if(fgets)
 		
 	}//end of while
-}
+	
+	#ifdef DEBUG
+	printf("count:%d\n", count);
+	#endif
+	
+	int i = 0;
+	for(; i < LINES_LEN; i++){
+		L = Lines[i];
+		if(L != NULL){
+			
+			#ifdef DEBUG
+			printf("free:%d\n", i);
+			#endif
+			
+			pass1_delete_line(L);
+		}
+	}
+	
+}//end of pass1_built_itmfile function
 

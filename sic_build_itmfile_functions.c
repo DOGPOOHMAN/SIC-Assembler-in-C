@@ -1,40 +1,61 @@
 #define ALL_LEN      60
-#define LABLE_LEN    15
-#define CODE_LEN     15
-#define OPRENT_LEN   15
+#define LABLE_LEN    10
+#define CODE_LEN     10
+#define OPRENT_LEN   10
 #define ERROR_LEN    100
 
 //#define DEBUG
 typedef struct line{
-	char all   [ ALL_LEN    + 1 ];//pluse one for '\0'
-	char lable [ LABLE_LEN  + 1 ];
-	char code  [ CODE_LEN   + 1 ];
-	char oprent[ OPRENT_LEN + 1 ];
+	//store all line character
+	char * all;
 	
-	short lableFlag;
-	short codeFlag;
-	short oprentFlag;
+	char * lable;
+	char * code;
+	char * oprent;
 	
-	short eroFlag;
-	char  eroMesg [ERROR_LEN];
+	//store error message
+	char * eroMesg;
+	
 } Line;
 
-void pass1_init_line(Line * l){
-	//memset can init all string as "\0\0\0\0\0\0\0...."
-	memset(l->all,    '\0', sizeof(l->all));
-	memset(l->lable,  '\0', sizeof(l->lable));
-	memset(l->code,   '\0', sizeof(l->code));
-	memset(l->oprent, '\0', sizeof(l->oprent));
-	memset(l->eroMesg,'\0', sizeof(l->eroMesg));
-
+Line * pass1_init_line(char * allLine){
+	Line * temp =  NULL;
 	
-	l->lableFlag   = FALSE;
-	l->codeFlag    = FALSE;
-	l->oprentFlag  = FALSE;
-	l->eroFlag     = FALSE;
+	temp = malloc( sizeof(Line) * (ALL_LEN  + 1) ); 
+	
+	//init Line variable
+	temp->all = malloc( sizeof(char) * (ALL_LEN  + 1) );
+	strcpy(temp->all, allLine);
+	
+	temp->lable    = NULL;
+	temp->code     = NULL;
+	temp->oprent   = NULL;
+	temp->eroMesg  = NULL;
+	
+	return temp;
 }//end of pass1_init_line function
 
-short pass1_isit_comment(Line * l){
+void pass1_delete_line(Line * l){
+	if(l->all != NULL)
+		free(l->all);
+
+	if(l->lable != NULL)
+		free(l->lable);
+		
+	if(l->code != NULL)
+		free(l->code);
+		
+	if(l->oprent != NULL)
+		free(l->oprent);
+		
+	if(l->eroMesg != NULL)
+		free(l->eroMesg);
+		
+	free(l);	
+
+}//end of pass1_init_line function
+
+short pass1_isit_comment(char * allLine){
 	short isCommentFalg;
 
   /* two type of write comment
@@ -48,7 +69,7 @@ short pass1_isit_comment(Line * l){
 	.	COMMENT
 	RDREC	LDX	ZERO*/
 
-	if( (l->all[ 0 ] == '.') || (l->all[ 1 ] == '.')){
+	if( (allLine[ 0 ] == '.') || (allLine[ 1 ] == '.')){
 		isCommentFalg = TRUE;
 	}	
 	else{
@@ -59,7 +80,8 @@ short pass1_isit_comment(Line * l){
 }//end of pass1_isit_comment function
 
 void pass1_divi_in3part(Line * l){
-	unsigned length      = strlen(l->all);
+
+	//to record the char address in 
 	char * tab1          = NULL;
 	char * tab2          = NULL;
 	char * newline       = NULL;
@@ -75,15 +97,20 @@ void pass1_divi_in3part(Line * l){
 		user maybe write enter in this line*/
 	if(tab1 == 0){
 
-		strcat(l->eroMesg, "-< this line is illegal,maybe you only write enter, please delete enter >-");
-		l->eroFlag = TRUE;
+		if(l->eroMesg == NULL){
+			l->eroMesg = malloc( sizeof(char) * (ERROR_LEN  + 1) );
+			memset(l->eroMesg, '\0', sizeof(l->eroMesg));
+		}
+		
+		strcat(l->eroMesg, "-< this line is illegal >-");
+
 		return;
 	}else if(tab1 == l->all){//means first char is tab, no lable
 	
-		l->lableFlag  = FALSE;
+		l->lable = NULL;
 	}else{
 		
-		l->lableFlag  = TRUE;
+		l->lable = malloc( sizeof(char) * (LABLE_LEN  + 1) );
 		strncpy(l->lable, l->all, (tab1 - l->all));
 	}
 	
@@ -105,10 +132,8 @@ void pass1_divi_in3part(Line * l){
 				^   ^
 					\n
 		*/
-		strncpy(l->code, front_opcode, (newline - front_opcode));
-		l->codeFlag    = TRUE;
-		l->oprentFlag  = FALSE;
-		
+		l->code = malloc( sizeof(char) * (CODE_LEN   + 1) );
+		strncpy(l->code, front_opcode, (newline - front_opcode));	
 	}
 	else{//means this line had opcode and oprent
 	
@@ -118,10 +143,12 @@ void pass1_divi_in3part(Line * l){
 		*/
 		front_oprent = tab2 + 1;
 		
-		strncpy(l->code,   front_opcode, (tab2 - front_opcode));
+		l->code   = malloc( sizeof(char) * (CODE_LEN   + 1) );
+		l->oprent = malloc( sizeof(char) * (OPRENT_LEN + 1) );
+		
+		strncpy(l->code,   front_opcode, (tab2    - front_opcode));
 		strncpy(l->oprent, front_oprent, (newline - front_oprent));
-		l->codeFlag    = TRUE;
-		l->oprentFlag  = TRUE;
+	
 	}
 	
 	#ifdef DEBUG
