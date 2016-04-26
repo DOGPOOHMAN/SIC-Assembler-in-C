@@ -104,6 +104,7 @@ Details:
 2.read opcode as int, if we need init Code-Object transform int to unsigned
 3.use scanf("%d%*c%d%*c%d...") read nixdpe
 4.when read "." means this line is comment and drop it
+5.remember to inster array sbscript count value(array border) checking
 
 
 
