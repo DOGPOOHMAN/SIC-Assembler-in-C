@@ -1,6 +1,6 @@
-unsigned pass1_htoi(char * math){
+unsigned pass1_hex2dec(char * math){
 	
-	int hex2dec(unsigned expon, int hex){
+	int toInt(unsigned expon, int hex){
 		int dec = 0;
 		
 		/* transform hex to dec */
@@ -29,7 +29,7 @@ unsigned pass1_htoi(char * math){
 		
 		return (unsigned)dec * base;
 		
-	}//end of hex2dec sub function
+	}//end of toInt sub function
 	
 	
 	int hex;
@@ -44,10 +44,10 @@ unsigned pass1_htoi(char * math){
 		hex = (int)math[adr];
 		
 		//0x32 = (2 * 16^0) + (3 * 16^1)
-		sum = sum + hex2dec(expon, hex);
+		sum = sum + toInt(expon, hex);
 	}
 	
 	return sum;
 	
-}//end of pass1_htoi function
+}//end of pass1_hex2dec function
 
