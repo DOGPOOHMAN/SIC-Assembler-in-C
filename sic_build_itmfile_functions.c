@@ -1,41 +1,5 @@
-#define ALL_LEN      60
-#define LABLE_LEN    10
-#define CODE_LEN     10
-#define OPRENT_LEN   10
-#define ERROR_LEN    100
 
-//#define DEBUG
-typedef struct line{
-	//store all line character
-	char * all;
-	
-	char * lable;
-	char * code;
-	char * oprent;
-	
-	//store error message
-	char * eroMesg;
-	
-
-	/*16 bit 0000 0000 0000 0000
-	    	  ^^^ ^^^^ ^^^^ ^^^^ */
-	unsigned locctr       : 16;
-	
-	/*8 bit 0000 0000
-	               ni*/
-	unsigned opCode       : 8;
-	
-	unsigned subscript;
-	
-	/* BYTE C'EOF' will be use*/
-	char *   objcode;
-	
-	
-} Line;
-
-
-
-
+/* used to initialize the Line-object */
 Line * pass1_init_line(char * allLine){
 	Line * temp =  NULL;
 	
@@ -61,7 +25,7 @@ Line * pass1_init_line(char * allLine){
 
 
 
-
+/* used to free the Line-object in memory*/
 void pass1_delete_line(Line * l){
 	if(l->all != NULL)
 		free(l->all);
@@ -87,7 +51,19 @@ void pass1_delete_line(Line * l){
 
 
 
+/* used to writing erroMesg into Line-object */
+void pass1_write_mesg(Line * l, char * mesg){
+	
+	if(l->eroMesg == NULL){
+		l->eroMesg = malloc( sizeof(char) * (ERROR_LEN  + 1) );
+		memset(l->eroMesg, '\0', sizeof(l->eroMesg));
+	}
+	
+	strcat(l->eroMesg, mesg);
+}//end of pass1_write_mesg function
 
+
+/* used to identify the pgm-line is comment or not */
 short pass1_isit_comment(char * allLine){
 	short isCommentFalg;
 
@@ -114,7 +90,7 @@ short pass1_isit_comment(char * allLine){
 
 
 
-
+/* used to divied the pgm-line into 3 part, 1.lable 2.code 3.oprent */
 void pass1_divi_in3part(Line * l){
 
 	//to record the char address in 
@@ -133,27 +109,23 @@ void pass1_divi_in3part(Line * l){
 		user maybe write enter in this line*/
 	if(tab1 == 0){
 
-		if(l->eroMesg == NULL){
-			l->eroMesg = malloc( sizeof(char) * (ERROR_LEN  + 1) );
-			memset(l->eroMesg, '\0', sizeof(l->eroMesg));
-		}
-		
-		strcat(l->eroMesg, "-< this line is illegal >-");
-
+		pass1_write_mesg(l, "-< this line is illegal >-");
 		return;
+		
 	}else if(tab1 == l->all){//means first char is tab, no lable
 	
 		l->lable = NULL;
 	}else{
 		
 		l->lable = malloc( sizeof(char) * (LABLE_LEN  + 1) );
+		memset(l->lable,  '\0', sizeof(l->lable));
 		strncpy(l->lable, l->all, (tab1 - l->all));
 	}
 	
 	
 	/*tab1 + 1 means the front of opcode column
-	RETADR	LDA	THREE
-			^
+	RETADR <tab1> LDA   THREE
+			      ^
 	*/
 	front_opcode = tab1 + 1;
 	//find second tab in line
@@ -161,14 +133,18 @@ void pass1_divi_in3part(Line * l){
 	//find newline(ascii 10) in line
 	newline = strchr(front_opcode,  10);
 	
-	if(tab2 == 0){//means this line didn't had oprent
 	
-		/*the situation of RSUB
-		ALPHA	RSUB
-				^   ^
+	//means this line didn't had oprent
+	if(tab2 == 0){
+	
+		/*the situation is RSUB
+			      
+		ALPHA <tab1> RSUB <NO tab2> 
+				     ^        ^
 					\n
 		*/
 		l->code = malloc( sizeof(char) * (CODE_LEN   + 1) );
+		memset(l->code,  '\0', sizeof(l->code));
 		strncpy(l->code, front_opcode, (newline - front_opcode));	
 	}
 	else{//means this line had opcode and oprent
@@ -181,6 +157,9 @@ void pass1_divi_in3part(Line * l){
 		
 		l->code   = malloc( sizeof(char) * (CODE_LEN   + 1) );
 		l->oprent = malloc( sizeof(char) * (OPRENT_LEN + 1) );
+		
+		memset(l->code,    '\0', sizeof(l->code  ));
+		memset(l->oprent,  '\0', sizeof(l->oprent));
 		
 		strncpy(l->code,   front_opcode, (tab2    - front_opcode));
 		strncpy(l->oprent, front_oprent, (newline - front_oprent));
@@ -197,7 +176,18 @@ void pass1_divi_in3part(Line * l){
 }//end of pass1_frag_to3part function
 
 
-
+/* processing the infor of pseudo instruction */
+unsigned pass1_itis_picode(Line * l, unsigned adr){
+	
+	unsigned shiftLoc = 0;
+	
+	switch(adr){
+		
+	}//end of switch
+	
+	
+	return shiftLoc;
+}//end of pass1_itis_picode function
 
 
 

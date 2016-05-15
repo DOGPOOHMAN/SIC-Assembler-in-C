@@ -1,12 +1,12 @@
 unsigned pass1_hex2dec(char * math){
-	
-	int toInt(unsigned expon, int hex){
-		int dec = 0;
-		
-		/* transform hex to dec */
-		
-		//0 ~ 9 ascii 48 ~ 57  transform into 0 ~ 9
-		if(hex >= 48 && hex <= 57){
+
+    int toInt(unsigned expon, int hex){
+    int dec = 0;
+        
+        /* transform hex to dec */
+        
+        //0 ~ 9 ascii 48 ~ 57  transform into 0 ~ 9
+        if(hex >= 48 && hex <= 57){
 			dec = hex - 48;
 		}
 		
