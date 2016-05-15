@@ -177,14 +177,17 @@ void pass1_divi_in3part(Line * l){
 
 
 /* processing the infor of pseudo instruction */
-unsigned pass1_itis_picode(Line * l, unsigned adr){
+unsigned pass1_process_picode(Line * l, unsigned loc, unsigned adr){
 	
-	unsigned shiftLoc = 0;
+	unsigned shiftLoc = 3;
 	
 	switch(adr){
 		
 	}//end of switch
 	
+	
+	l->subscript = 999;
+	l->locctr    = loc;
 	
 	return shiftLoc;
 }//end of pass1_itis_picode function

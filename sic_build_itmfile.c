@@ -49,7 +49,7 @@ void pass1_built_itmfile(FILE * sicPgrm){
 	
 	
 	/* starting reading program content 
-	one time read only a line into program from user's SIC program file*/
+	one time only read a line into program from user's SIC program file*/
 	
 	while(stopReadFlag == FALSE){
 		
@@ -85,8 +85,10 @@ void pass1_built_itmfile(FILE * sicPgrm){
 	}//end of while
 	
 	
-	//store the program-name and starting locctr from Line-object
+	//store the program-name from Line-object
 	strcpy(pgrmName,        Lines[0]->lable  );
+	
+	//store the starting locctr from Line-object
 	nowLoc = pass1_hex2dec( Lines[0]->oprent );
 	
 	
@@ -126,7 +128,7 @@ void pass1_built_itmfile(FILE * sicPgrm){
             */
 			tableAdr = pass1_find_opcode(L->code);
 			
-			//if foud code in optable, 
+			//process opcode 
 			if(tableAdr != 99){
 				L->locctr    = nowLoc;
 				L->opCode    = OPTABLE[ tableAdr ].opCode;
@@ -135,10 +137,16 @@ void pass1_built_itmfile(FILE * sicPgrm){
 				//increse locctr by opcode format
 				nowLoc = nowLoc + OPTABLE[ tableAdr ].format;
 				
+				
+			//process pseudo-code
 			}else if(tableAdr = pass1_find_pi(L->code) != 99){// if found in pitable
 			
+			    unsigned shiftLoc = 0;
 				
-				
+				shiftLoc = pass1_process_picode(L, nowLoc, tableAdr);
+			
+                nowLoc = nowLoc + shiftLoc;
+            //it is illegal line	
 			}else{
 				L->locctr = 0xFFFF;
 				pass1_write_mesg(L, "-< opcode or picode is illegal >-");
