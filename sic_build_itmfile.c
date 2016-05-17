@@ -95,18 +95,19 @@ void pass1_built_itmfile(FILE * sicPgrm){
 	
 	/* starting write detail infor into Line-object */		
 	
-	
-	
-	unsigned tableAdr = 0;
+
 	
 	/*First line is title(COPY START 1000), it is spacial case and didn't need
     to find opcode and paseudo-instruction,so for-loop start at 1 not 0
     
-	This for-loop process the infor to intermediate file from previous while loop
+    and the last line "END FIRST" is spcial case,
+    so for-loop use " i < countLines - 1 "
+
+	This for-loop process use to rocord Symble-Lable and opCode
 	*/
-	for(i = 1; i < countLines; i++){
+	for(i = 1; i < countLines - 1; i++){
 		L = Lines[ i ];
-		
+
 		//have error mesag means this line is illegal
 		if(L->eroMesg != NULL){
 			
@@ -126,36 +127,79 @@ void pass1_built_itmfile(FILE * sicPgrm){
             if this code can not be found in opTable,
             set "tableAdr" value be 99
             */
-			tableAdr = pass1_find_opcode(L->code);
+			pass1_find_code_in_table(L);
 			
-			//process opcode 
-			if(tableAdr != 99){
-				L->locctr    = nowLoc;
-				L->opCode    = OPTABLE[ tableAdr ].opCode;
-				L->subscript = tableAdr;
-				
-				//increse locctr by opcode format
-				nowLoc = nowLoc + OPTABLE[ tableAdr ].format;
-				
-				
-			//process pseudo-code
-			}else if(tableAdr = pass1_find_pi(L->code) != 99){// if found in pitable
 			
-			    unsigned shiftLoc = 0;
-				
-				shiftLoc = pass1_process_picode(L, nowLoc, tableAdr);
+			//it is legal line
+			if(L->eroMesg == NULL){
+
+                L->locctr = nowLoc;
+                //process opCode
+                if(L->subscript >= OP_BASE && L->subscript < PI_BASE){
+    				
+    				//increse locctr by opcode format
+    				nowLoc = nowLoc + OPTABLE[ L->subscript - OP_BASE ].format;
+    				
+    				
+    			//process pseudo-instruction
+    			}else if(L->subscript > PI_BASE){
+    			
+    			    unsigned shiftLoc = 0;
+    				
+    				shiftLoc = pass1_process_picode(L);
+    			   
+                    nowLoc = nowLoc + shiftLoc;
+                }
+            	
+			}//end of if(L->eroMesg == NULL)
 			
-                nowLoc = nowLoc + shiftLoc;
-            //it is illegal line	
-			}else{
-				L->locctr = 0xFFFF;
-				pass1_write_mesg(L, "-< opcode or picode is illegal >-");
-			}
 		}//end of if(L->eroMesg != NULL)
 		
 	}//end of for
 	
+	
+	//store program starting location
+	unsigned loc = 0;
+	unsigned adr = 0;
+	
+	//the last line  "END FIRST"
+	L = Lines[ countLines - 1 ];
+	
+	if(L->oprent == NULL){
+        
+        /* case: START 1000
+        use 1000 be start-locctr
+        */
+        
+        startLoc =  pass1_hex2dec( Lines[0]->oprent );
+    }else{
+        
+        /* case: END FIRST
+        use FIRST be start-locctr
+        find FIRST in Symble-Table
+        */
+        adr = pass1_find_sym(Syms, L->oprent);
+        
+        //successful find the symble-lable
+        if(adr != ERROR_VALUE){
+            
+            startLoc = Syms[ adr ].locctr;
+        }else{
+            
+            pass1_write_mesg(L, "-< can not find start Lable >-");
+        }
+        
+    }//end of if(L->oprent == NULL)
+	
+	
+	
+	
 	#ifdef DEBUG
+	printf("Program-Name:%s\n", pgrmName);
+    printf("Start-Loc:%x\n", startLoc);
+
+    puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
+	
 	for(i = 0; i < countLines; i++){
 		L = Lines[ i ];
 		
@@ -166,11 +210,12 @@ void pass1_built_itmfile(FILE * sicPgrm){
 		printf("%10s:%20s--\n", "code", L->code);
 		printf("%10s:%20s--\n", "oprent", L->oprent);
 
-		printf("\n%10s:%20d--\n\n", "subscript", L->subscript);
+        printf("\n%10s:%20x--\n", "locctr", L->locctr);
+		printf("%10s:%20d--\n\n", "subscript", L->subscript);
 		
-		printf("%10s:%20x--\n", "locctr", L->locctr);
-		printf("%10s:%20x--\n", "opCode", L->opCode);
-		printf("%10s:%20s--\n\n", "objcode", L->objcode);
+		
+		printf("%10s:%20s--\n", "bytes", L->bytes);
+		printf("%10s:%20s--\n\n", "ascii", L->ascii);
 		
 		printf("%10s:%20s--\n", "eroMesg", L->eroMesg);
 		
@@ -179,14 +224,17 @@ void pass1_built_itmfile(FILE * sicPgrm){
 	#endif
 	
 	
+    puts("\n\n>>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
+	for(i = 0; i < countSyms - 1 ; i++){
+        printf("Symble# %d\n", i);
+        printf("   Lable--%s--\n", Syms[ i ].lable);
+        printf("   Loc--%x--\n\n", Syms[ i ].locctr);
+    }
+    
+    
 	for(i = 0; i < LINES_LEN; i++){
 		L = Lines[i];
 		if(L != NULL){
-			
-			#ifdef DEBUG
-			printf("free:%d\n", i);
-			#endif
-			
 			pass1_delete_line(L);
 		}
 	}

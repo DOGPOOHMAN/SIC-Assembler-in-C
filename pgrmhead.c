@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TRUE 1
-#define FALSE 0
+#define TRUE   1
+#define FALSE  0
 
 /* sic_tables.c */
 #define OPTABLE_LEN      26
@@ -14,16 +14,28 @@
 #define LABLE_LEN    10
 #define CODE_LEN     10
 #define OPRENT_LEN   10
-#define ERROR_LEN    100
+#define ERROR_LEN    200
 
 /* sic_build_itmfile.c */
-#define LINES_LEN 100
-#define SYM_LEN 50
+#define LINES_LEN  100
+#define SYM_LEN    50
 
+/* sic_find_tables*/
+#define OP_BASE      100
+#define PI_BASE      200
+#define ERROR_VALUE  999
+
+/* pseudo-instruction */
+#define START  0
+#define BYTE   1
+#define WORD   2
+#define RESB   3
+#define RESW   4
+#define END    5
 
 /* operation table */
 struct opTable{
-  	char     name     [7];
+  	char     name     [LABLE_LEN + 1];
   	
 	/*8 bit 0000 0000
 	               ni*/
@@ -41,7 +53,7 @@ const char * PITABLE[ PSEUDO_INS_LEN ]
 
 /* symble table */
 typedef struct symtable{
-	char     lable     [7];
+	char     lable     [LABLE_LEN + 1];
 	unsigned locctr   : 16;
 } SYMTABLE;
 
@@ -74,15 +86,15 @@ typedef struct line{
 	    	  ^^^ ^^^^ ^^^^ ^^^^ */
 	unsigned locctr       : 16;
 	
-	/*8 bit 0000 0000
-	               ni*/
-	unsigned opCode       : 8;
-	
 	unsigned subscript;
 	
-	/* BYTE C'EOF' will be use*/
-	char *   objcode;
 	
+	/* store BYTE instruction values */
+	char *   bytes;
+	char *   ascii;
+	
+	/*store opCode and WORD intructions values*/
+	//Format3 format3;
 	
 	//store error message
 	char * eroMesg;

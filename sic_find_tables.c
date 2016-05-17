@@ -1,7 +1,7 @@
 
 /* used to find code in opTable
 if this code can not be found in Table
-set "subscript" value be 99
+set "subscript" value be ERROR_VALUE
 */
 unsigned pass1_find_opcode(char * temp){
 	unsigned subscript = 0;
@@ -14,7 +14,7 @@ unsigned pass1_find_opcode(char * temp){
 	
 	//if not found
 	if(subscript >= OPTABLE_LEN){
-		subscript = 99;
+		subscript = ERROR_VALUE;
 	}
 	
 	return subscript;
@@ -24,7 +24,7 @@ unsigned pass1_find_opcode(char * temp){
 
 /* used to find code in piTable(pseudoTable)
 if this code can not be found in Table
-set "subscipt" value be 99
+set "subscipt" value be ERROR_VALUE
 */
 unsigned pass1_find_pi(char * temp){
 	unsigned subscript = 0;
@@ -37,39 +37,28 @@ unsigned pass1_find_pi(char * temp){
 	
 	//if not found
 	if(subscript >= PSEUDO_INS_LEN){
-		subscript = 99;
+		subscript = ERROR_VALUE;
 	}
 	
 	return subscript;
 }//end of pass1_find_opcode function
 
 
-
-/* used to find code in opTable and piTable 
-if this code can not be found in Tables
-set "subscript" value be 99
-*/
-unsigned pass1_find_in_table(char * temp){
+unsigned pass1_find_sym(SYMTABLE *Syms, char * temp){
 	unsigned subscript = 0;
 	
-	//find in opTable
-	subscript = pass1_find_opcode(temp);
+	for(; subscript < SYM_LEN; subscript++){
+		if(strcmp(temp, Syms[ subscript ].lable) == 0 ){
+			break;
+		}
+	}
 	
-	//find in pseudoTable
-	if(subscript == 99){
-	    subscript = pass1_find_pi(temp);
-    }
+	//if not found
+	if(subscript >= SYM_LEN){
+		subscript = ERROR_VALUE;
+	}
 	
 	return subscript;
-}//end of pass1_find_in_table function
+}//end of pass1_find_opcode function
 
-//SYMTABLE * pass1_init_symtable(char * lable, unsigned locctr){
-//	SYMTABLE * temp;
-//	temp = malloc( sizeof(SYMTABLE) );
-//	
-//	strcpy(temp->lable, lable);
-//	temp->locctr = locctr;
-//	
-//	return temp;
-//}//end of pass1_init_symtable function
 
