@@ -102,7 +102,7 @@ unsigned pass1_process_picode(Line * L){
             
         }else{
             
-            intValue = atoi(oprent);
+            intValue = (unsigned)atoi(oprent);
         }//end of if(oprent[0] == 'X')
             
         
@@ -111,7 +111,8 @@ unsigned pass1_process_picode(Line * L){
         switch(L->subscript - PI_BASE){
     	    
             case WORD:
-                //format3
+                //WORD generate a 3-bytes objCode 
+                L->format3 = p010_init_format3(intValue);
                 shiftLoc = 3;
                 break;
     	        

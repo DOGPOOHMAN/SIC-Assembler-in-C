@@ -2,7 +2,7 @@
 
 #include "sic_find_tables.c"
 #include "sic_hex_to_dec.c"
-
+#include "sic_format3.c"
 
 #include "sic_line.c"
 

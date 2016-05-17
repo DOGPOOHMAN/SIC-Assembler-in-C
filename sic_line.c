@@ -2,7 +2,7 @@
 Line * pass1_init_line(char * allLine){
 	Line * L =  NULL;
 	
-	L = malloc( sizeof(Line) * (ALL_LEN  + 1) ); 
+	L = (Line *)malloc( sizeof(Line) ); 
 	
 	//init Line variable
 	L->all = malloc( sizeof(char) * (ALL_LEN  + 1) );
@@ -17,6 +17,8 @@ Line * pass1_init_line(char * allLine){
 	L->locctr    = 0;
 	L->subscript = 0;
 	
+	
+	L->format3 = NULL;
 	
 	L->bytes   = NULL;
 	L->ascii   = NULL;
@@ -50,6 +52,10 @@ void pass1_delete_line(Line * L){
 	//bytes
     if(L->bytes != NULL)
 		free(L->bytes);
+		
+	//format3
+    if(L->format3 != NULL)
+		free(L->format3);
 	
     //ascii	
 	if(L->ascii != NULL)

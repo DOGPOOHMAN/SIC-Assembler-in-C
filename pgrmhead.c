@@ -45,19 +45,6 @@ struct opTable{
 	unsigned format     : 2;
 };
 
-
-/* pseudo isntrution table (piTable)*/
-const char * PITABLE[ PSEUDO_INS_LEN ]
-		= {"START", "BYTE", "WORD", "RESB", "RESW", "END" };
-
-
-/* symble table */
-typedef struct symtable{
-	char     lable     [LABLE_LEN + 1];
-	unsigned locctr   : 16;
-} SYMTABLE;
-
-
 const struct opTable OPTABLE[ OPTABLE_LEN ] = {
 	/* total 26 */
 	/* array subscript 0 ~ 19 */
@@ -71,6 +58,51 @@ const struct opTable OPTABLE[ OPTABLE_LEN ] = {
 	{ "STSW",0xE8,3 },	{ "STX",0x10,3 },	{ "SUB",0x1C,3 },	{ "TD",0xE0,3 },
 	{ "TIX",0x2C,3 },	{ "WD",0xDC,3 }	
 };
+
+
+
+
+/* pseudo isntrution table (piTable)*/
+const char * PITABLE[ PSEUDO_INS_LEN ]
+		= {"START", "BYTE", "WORD", "RESB", "RESW", "END" };
+
+
+
+
+
+/* symble table */
+typedef struct symtable{
+	char     lable     [LABLE_LEN + 1];
+	unsigned locctr   : 16;
+} SYMTABLE;
+
+
+
+
+
+typedef struct FORMAT3 {
+	/*8 bit 0000 0000
+	               ni*/
+	unsigned opCode     : 8;
+	
+	/*16 bit 0000 0000 0000 0000
+	    	  ^^^ ^^^^ ^^^^ ^^^^ */
+	unsigned disp       : 16;
+	
+	/*16 bit 1000 0000 0000 0000
+	    	 ^
+	 use to insert x-bit into disp
+	 x means x-relative addressing */
+	unsigned xMask      : 16;
+	
+	/* sic use format3 (8-bits X 3) */
+	unsigned ojbCode    : 24;
+	
+	/* x means x-relative addressing */
+	short xFlag;
+	
+} Format3;
+
 
 
 typedef struct line{
@@ -89,15 +121,17 @@ typedef struct line{
 	unsigned subscript;
 	
 	
-	/* store BYTE instruction values */
-	char *   bytes;
-	char *   ascii;
-	
 	/*store opCode and WORD intructions values*/
-	//Format3 format3;
+	Format3 * format3;
+	
+	
+	/* store BYTE instruction values */
+	char *    bytes;
+	char *    ascii;
+	
 	
 	//store error message
-	char * eroMesg;
+	char *   eroMesg;
 	
 } Line;
 
