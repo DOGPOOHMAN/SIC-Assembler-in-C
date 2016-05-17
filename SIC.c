@@ -17,6 +17,25 @@
 
 int main(void){
 	
+	int i = 0;
+	
+	//sotre symble-table
+	SYMTABLE Syms[ SYM_LEN ];
+	
+	//store the intermediate file infor
+	Line * Lines[ LINES_LEN ];
+	
+	
+	//init array as NULL, NULL, .....
+	memset(Lines,        0, sizeof(Lines));
+	
+	//init SYMTABLE Syms[ SYM_LEN ];
+	for(i = 0; i < SYM_LEN; i++){
+		memset(Syms[ i ].lable, '\0', sizeof(Syms[ i ].lable));
+		Syms[ i ].locctr = 0;
+	}
+	
+	
 	
 	//open sic program file
 	static FILE * sicPgrm;
@@ -26,7 +45,9 @@ int main(void){
 	
 	
 	//build and output a intermediate file(itmfile)
-	pass1_built_itmfile( sicPgrm );
+	pass1_built_itmfile( sicPgrm, Syms, Lines);
+	
+	
 	
 //	//unic testing of pass1_process_picode()
 //	Line * L;

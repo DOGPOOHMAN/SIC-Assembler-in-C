@@ -5,12 +5,8 @@
 */
 
 #define DEBUG
-void pass1_built_itmfile(FILE * sicPgrm){
-	SYMTABLE Syms[ SYM_LEN ];
-	
-	//store the intermediate file infor
-	Line * Lines[ LINES_LEN ];
-	
+void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
+
 	//store the malloc struct of Line object
 	Line * L;
 	
@@ -36,14 +32,7 @@ void pass1_built_itmfile(FILE * sicPgrm){
 	//init array as "\0\0\0\0\0\0....."
 	memset(pgrmName,  '\0', sizeof(pgrmName));
 	
-	//init array as NULL, NULL, .....
-	memset(Lines,        0, sizeof(Lines));
-	
-	//init SYMTABLE Syms[ SYM_LEN ];
-	for(i = 0; i < SYM_LEN; i++){
-		memset(Syms[ i ].lable, '\0', sizeof(Syms[ i ].lable));
-		Syms[ i ].locctr = 0;
-	}
+
 	
 
 	
