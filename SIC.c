@@ -23,11 +23,16 @@ int main(void){
 	int i = 0;
 	unsigned countLines = 0;
 	
-	//sotre symble-table
+	//store symble-table
 	SYMTABLE Syms[ SYM_LEN ];
 	
 	//store the intermediate file infor
 	Line * Lines[ LINES_LEN ];
+	
+	//store the program information
+	INFOR infor;
+	
+	
 	
 	//init array as NULL, NULL, .....
 	memset(Lines,        0, sizeof(Lines));
@@ -37,6 +42,12 @@ int main(void){
 		memset(Syms[ i ].lable, '\0', sizeof(Syms[ i ].lable));
 		Syms[ i ].locctr = 0;
 	}
+	
+	//init infor
+	memset(infor.pgmName, '\0', sizeof(infor.pgmName));
+	infor.countLines  = 0;
+	infor.pgmLen      = 0;
+	infor.startLoc    = 0;
 	
 	
 	
@@ -48,13 +59,13 @@ int main(void){
 	
 	
 	//build and output a intermediate file(itmfile)
-	countLines = p130_built_itmfile( sicPgrm, Syms, Lines);
+	p130_built_itmfile( sicPgrm, Syms, Lines, &infor);
 	
 	//close the sic program file-stream
 	fclose(sicPgrm);
 	
-	p200_gener_f3_objcode(Syms, Lines, countLines);
-    p210_output_objpgrm(Syms, Lines, countLines);
+	p200_gener_f3_objcode(Syms, Lines, infor.countLines);
+    p210_output_objpgrm(Syms, Lines, &infor);
 	
 	
 	//free the Line-Obj

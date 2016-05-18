@@ -1,12 +1,16 @@
 
-void p210_output_objpgrm(SYMTABLE * Syms, Line ** Lines, unsigned countLines){
+void p210_output_objpgrm(SYMTABLE * Syms, Line ** Lines, INFOR * infor){
     
     FILE * output;
     output = fopen("objpgm.txt", "w");
+    puts("-------------------------------");
+    puts("The output obj-program file name is <objpgm.txt> ");
+    puts("-------------------------------");
     
     Line * L  = NULL;
     
     int i = 0;
+    int counter = 0;
     
     unsigned ctBytes  = 0;
     unsigned count    = 0;
@@ -17,9 +21,13 @@ void p210_output_objpgrm(SYMTABLE * Syms, Line ** Lines, unsigned countLines){
     short    stopFlag = FALSE;
     
     
-    fprintf(output, "H%-10s%.6x%.6x\n","AA", 0x000100, 0x001000);
+    fprintf(output, 
+            "H%-10s%.6x%.6x\n",
+            infor->pgmName,
+            infor->startLoc,
+            infor->pgmLen);
     
-    while(nowAdr < countLines){
+    while(nowAdr < infor->countLines){
         
         ctBytes = 0;
         
@@ -81,8 +89,12 @@ void p210_output_objpgrm(SYMTABLE * Syms, Line ** Lines, unsigned countLines){
                     fprintf(output, "%s", L->bytes);
                 }else if(L->ascii != NULL){
                     
-                    fprintf(output, "%s", L->ascii);
-                }
+                    len = strlen(L->ascii);
+                    for(counter = 0; counter < len; counter++){
+                        fprintf(output, "%d", L->ascii[counter]);
+                    }
+                    
+                }//end of if(L->format3 != NULL)
             }
             
         }//end of for-loop

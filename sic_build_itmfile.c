@@ -5,7 +5,7 @@
 */
 
 #define DEBUG
-unsigned p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
+void p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines, INFOR * infor){
 
 	//store the malloc struct of Line object
 	Line * L;
@@ -186,15 +186,16 @@ unsigned p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
     }//end of if(L->oprent == NULL)
     
     
+    //store the program information
+    strcpy(infor->pgmName, pgrmName);
+    infor->startLoc = startLoc;
+    infor->pgmLen   = pgmLen;
+    infor->countLines = countLines;
+    
+    
     
     /* start printing the itermidate information */
     
-    printf("Program-Name:\t%s\n", pgrmName);
-    printf("Start-Loc:\t%x\n", startLoc);
-    printf("Program-Length:\t%x\n", pgmLen);
-
-
-    puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
     puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
 	
 	for(i = 0; i < countLines; i++){
@@ -219,7 +220,7 @@ unsigned p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 	}
 	printf("countLines:%d\n", countLines);
 	
-	puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
+	puts("\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
 	
     puts("\n\n>>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
 	for(i = 0; i < countSyms - 1 ; i++){
@@ -227,8 +228,14 @@ unsigned p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
         printf("   Lable--%s--\n", Syms[ i ].lable);
         printf("   Loc--%x--\n\n", Syms[ i ].locctr);
     }
-    puts("\n\n>>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
+    puts(">>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
 	
-	return(countLines);
+	
+    printf("Program-Name:\t%s\n", pgrmName);
+    printf("Start-Loc:\t%x\n", startLoc);
+    printf("Program-Length:\t%x\n", pgmLen);
+
+
+	
 }//end of p130_built_itmfile function
 

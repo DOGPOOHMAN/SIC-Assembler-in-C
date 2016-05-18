@@ -77,7 +77,12 @@ typedef struct symtable{
 } SYMTABLE;
 
 
-
+typedef struct Information{
+	char     pgmName [LABLE_LEN + 1];
+	unsigned startLoc;
+	unsigned pgmLen;
+	unsigned countLines;
+} INFOR;
 
 
 typedef struct FORMAT3 {
