@@ -96,7 +96,7 @@ typedef struct FORMAT3 {
 	unsigned xMask      : 16;
 	
 	/* sic use format3 (8-bits X 3) */
-	unsigned ojbCode    : 24;
+	unsigned objCode    : 24;
 	
 	/* x means x-relative addressing */
 	short xFlag;
