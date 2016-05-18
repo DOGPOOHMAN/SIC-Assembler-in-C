@@ -5,7 +5,7 @@
 */
 
 #define DEBUG
-void p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
+unsigned p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 
 	//store the malloc struct of Line object
 	Line * L;
@@ -124,14 +124,14 @@ void p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 
                 L->locctr = nowLoc;
                 //process opCode
-                if(L->subscript >= OP_BASE && L->subscript < PI_BASE){
+                if(L->subscript / OP_BASE == 1){
     				
     				//increse locctr by opcode format
     				nowLoc = nowLoc + OPTABLE[ L->subscript - OP_BASE ].format;
     				
     				
     			//process pseudo-instruction
-    			}else if(L->subscript > PI_BASE){
+    			}else if(L->subscript / PI_BASE == 1){
     			
     			    unsigned shiftLoc = 0;
     				
@@ -228,14 +228,7 @@ void p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
         printf("   Loc--%x--\n\n", Syms[ i ].locctr);
     }
     puts("\n\n>>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
-    
-	for(i = 0; i < LINES_LEN; i++){
-		L = Lines[i];
-		if(L != NULL){
-			p111_delete_line(L);
-		}
-	}
 	
-	
+	return(countLines);
 }//end of p130_built_itmfile function
 

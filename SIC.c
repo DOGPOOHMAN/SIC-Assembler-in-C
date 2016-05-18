@@ -14,17 +14,18 @@
 
 #include "sic_build_itmfile.c"
 
+#include "sic_gener_f3.c"
 
 int main(void){
 	
 	int i = 0;
+	unsigned countLines = 0;
 	
 	//sotre symble-table
 	SYMTABLE Syms[ SYM_LEN ];
 	
 	//store the intermediate file infor
 	Line * Lines[ LINES_LEN ];
-	
 	
 	//init array as NULL, NULL, .....
 	memset(Lines,        0, sizeof(Lines));
@@ -45,19 +46,23 @@ int main(void){
 	
 	
 	//build and output a intermediate file(itmfile)
-	p130_built_itmfile( sicPgrm, Syms, Lines);
+	countLines = p130_built_itmfile( sicPgrm, Syms, Lines);
 	
-		
+	//close the sic program file-stream
+	fclose(sicPgrm);
 	
-//	//unic testing of pass1_process_picode()
-//	Line * L;
-//	unsigned tableAdr = 0;
-//	
-//	
-//	L = pass1_init_line("OUTPUT	BYTE	X'05'\n");
-//	pass1_divi_in3part(L);
-//	pass1_find_code_in_table(L);
-//	shiftLoc = pass1_process_picode(L, nowLoc, L->subscript);
+	p200_gener_f3_objcode(Syms, Lines, countLines);
+
+	
+	
+	//free the Line-Obj
+	Line * L;
+	for(i = 0; i < LINES_LEN; i++){
+		L = Lines[i];
+		if(L != NULL){
+			p111_delete_line(L);
+		}
+	}
 	
 	system("pause");
 	
