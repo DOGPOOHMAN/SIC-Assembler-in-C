@@ -16,6 +16,8 @@
 
 #include "sic_gener_f3.c"
 
+#include "sic_output_objpgm.c"
+
 int main(void){
 	
 	int i = 0;
@@ -52,7 +54,7 @@ int main(void){
 	fclose(sicPgrm);
 	
 	p200_gener_f3_objcode(Syms, Lines, countLines);
-
+    p210_output_objpgrm(Syms, Lines, countLines);
 	
 	
 	//free the Line-Obj
