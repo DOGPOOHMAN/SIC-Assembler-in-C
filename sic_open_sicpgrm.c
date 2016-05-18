@@ -1,5 +1,5 @@
 
-FILE * pass1_open_sicpgrm(void){
+FILE * p120_open_sicpgrm(void){
 	char fileName[20];
 	FILE * fileStream = NULL;
 	short openSuccess = FALSE;
@@ -24,5 +24,5 @@ FILE * pass1_open_sicpgrm(void){
 	}//end of while
 	
 	return fileStream;
-}//end of open_file function
+}//end of p120_open_file function
 

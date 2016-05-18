@@ -39,15 +39,15 @@ int main(void){
 	
 	//open sic program file
 	static FILE * sicPgrm;
-//	sicPgrm = pass1_open_sicpgrm();
+//	sicPgrm = p120_open_sicpgrm();
 	sicPgrm = fopen("sicpgrm.txt", "r");
 	
 	
 	
 	//build and output a intermediate file(itmfile)
-	pass1_built_itmfile( sicPgrm, Syms, Lines);
+	p130_built_itmfile( sicPgrm, Syms, Lines);
 	
-	
+		
 	
 //	//unic testing of pass1_process_picode()
 //	Line * L;

@@ -3,7 +3,7 @@
 if this code can not be found in Table
 set "subscript" value be ERROR_VALUE
 */
-unsigned pass1_find_opcode(char * temp){
+unsigned p010_find_opcode(char * temp){
 	unsigned subscript = 0;
 	
 	for(; subscript < OPTABLE_LEN; subscript++){
@@ -18,7 +18,7 @@ unsigned pass1_find_opcode(char * temp){
 	}
 	
 	return subscript;
-}//end of pass1_find_opcode function
+}//end of p010_find_opcode function
 
 
 
@@ -26,7 +26,7 @@ unsigned pass1_find_opcode(char * temp){
 if this code can not be found in Table
 set "subscipt" value be ERROR_VALUE
 */
-unsigned pass1_find_pi(char * temp){
+unsigned p011_find_pi(char * temp){
 	unsigned subscript = 0;
 	
 	for(; subscript < PSEUDO_INS_LEN; subscript++){
@@ -41,10 +41,10 @@ unsigned pass1_find_pi(char * temp){
 	}
 	
 	return subscript;
-}//end of pass1_find_opcode function
+}//end of p011_find_pi function
 
 
-unsigned pass1_find_sym(SYMTABLE *Syms, char * temp){
+unsigned p012_find_sym(SYMTABLE *Syms, char * temp){
 	unsigned subscript = 0;
 	
 	for(; subscript < SYM_LEN; subscript++){
@@ -59,6 +59,6 @@ unsigned pass1_find_sym(SYMTABLE *Syms, char * temp){
 	}
 	
 	return subscript;
-}//end of pass1_find_opcode function
+}//end of p012_find_sym function
 
 

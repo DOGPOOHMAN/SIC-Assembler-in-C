@@ -5,15 +5,15 @@
 */
 
 #define DEBUG
-void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
+void p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 
 	//store the malloc struct of Line object
 	Line * L;
 	
 	//store program infor
 	char     pgrmName [10];
-	unsigned startLoc =  0;
-	
+	unsigned startLoc = 0;
+	unsigned pgmLen   = 0;
 	
 	//will change in processing
 	
@@ -54,16 +54,16 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 		}
 		/*if it is comment line drop it,but 
 		divided this line to three part*/
-		else if(pass1_isit_comment(tmpLine) == TRUE){
+		else if(p131_isit_comment(tmpLine) == TRUE){
 			continue;
 		}
 		else{
 		
 			//init(malloc) struct Line object
-			L = pass1_init_line(tmpLine);
+			L = p110_init_line(tmpLine);
 			
 			//divided to three part of lable, code, oprent
-			pass1_divi_in3part(L);
+			p113_divi_in3part(L);
 			
 			//store this line object into Line object array
 			Lines[countLines] = L;
@@ -78,7 +78,7 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 	strcpy(pgrmName,        Lines[0]->lable  );
 	
 	//store the starting locctr from Line-object
-	nowLoc = pass1_hex2dec( Lines[0]->oprent );
+	nowLoc = p000_hex2dec( Lines[0]->oprent );
 	
 	
 	
@@ -116,7 +116,7 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
             if this code can not be found in opTable,
             set "tableAdr" value be 99
             */
-			pass1_find_code_in_table(L);
+			p114_find_code_in_table(L);
 			
 			
 			//it is legal line
@@ -135,7 +135,7 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
     			
     			    unsigned shiftLoc = 0;
     				
-    				shiftLoc = pass1_process_picode(L);
+    				shiftLoc = p115_process_picode(L);
     			   
                     nowLoc = nowLoc + shiftLoc;
                 }
@@ -145,6 +145,11 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 		}//end of if(L->eroMesg != NULL)
 		
 	}//end of for
+	
+	
+	
+	//store the program lenth
+	pgmLen = nowLoc - p000_hex2dec( Lines[0]->oprent );
 	
 	
 	//store program starting location
@@ -160,14 +165,14 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
         use 1000 be start-locctr
         */
         
-        startLoc =  pass1_hex2dec( Lines[0]->oprent );
+        startLoc =  p000_hex2dec( Lines[0]->oprent );
     }else{
         
         /* case: END FIRST
         use FIRST be start-locctr
         find FIRST in Symble-Table
         */
-        adr = pass1_find_sym(Syms, L->oprent);
+        adr = p012_find_sym(Syms, L->oprent);
         
         //successful find the symble-lable
         if(adr != ERROR_VALUE){
@@ -175,18 +180,21 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
             startLoc = Syms[ adr ].locctr;
         }else{
             
-            pass1_write_mesg(L, "-< can not find start Lable >-");
+            p112_write_mesg(L, "-< can not find start Lable >-");
         }
         
     }//end of if(L->oprent == NULL)
-	
-	
-	
-	
-	#ifdef DEBUG
-	printf("Program-Name:%s\n", pgrmName);
-    printf("Start-Loc:%x\n", startLoc);
+    
+    
+    
+    /* start printing the itermidate information */
+    
+    printf("Program-Name:\t%s\n", pgrmName);
+    printf("Start-Loc:\t%x\n", startLoc);
+    printf("Program-Length:\t%x\n", pgmLen);
 
+
+    puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
     puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
 	
 	for(i = 0; i < countLines; i++){
@@ -210,8 +218,8 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
 		
 	}
 	printf("countLines:%d\n", countLines);
-	#endif
 	
+	puts("\n\n>>>>>>>>>>>>>>> Each Line Detail <<<<<<<<<<<<<<<<<");
 	
     puts("\n\n>>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
 	for(i = 0; i < countSyms - 1 ; i++){
@@ -219,14 +227,15 @@ void pass1_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines){
         printf("   Lable--%s--\n", Syms[ i ].lable);
         printf("   Loc--%x--\n\n", Syms[ i ].locctr);
     }
-    
+    puts("\n\n>>>>>>>>>>>>>>> Symble-Table <<<<<<<<<<<<<<<<<");
     
 	for(i = 0; i < LINES_LEN; i++){
 		L = Lines[i];
 		if(L != NULL){
-			pass1_delete_line(L);
+			p111_delete_line(L);
 		}
 	}
 	
-}//end of pass1_built_itmfile function
+	
+}//end of p130_built_itmfile function
 

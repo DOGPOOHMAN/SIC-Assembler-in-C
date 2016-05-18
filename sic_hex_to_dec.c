@@ -1,4 +1,4 @@
-unsigned pass1_hex2dec(char * math){
+unsigned p000_hex2dec(char * math){
 
     int toInt(unsigned expon, int hex){
     int dec = 0;
@@ -49,5 +49,5 @@ unsigned pass1_hex2dec(char * math){
 	
 	return sum;
 	
-}//end of pass1_hex2dec function
+}//end of p000_hex2dec function
 

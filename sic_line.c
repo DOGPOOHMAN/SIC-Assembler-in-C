@@ -1,5 +1,5 @@
 /* used to initialize the Line-object */
-Line * pass1_init_line(char * allLine){
+Line * p110_init_line(char * allLine){
 	Line * L =  NULL;
 	
 	L = (Line *)malloc( sizeof(Line) ); 
@@ -26,12 +26,12 @@ Line * pass1_init_line(char * allLine){
 	
 	L->eroMesg  = NULL;
 	return L;
-}//end of pass1_init_line function
+}//end of p110_init_line function
 
 
 
 /* used to free the Line-object in memory*/
-void pass1_delete_line(Line * L){
+void p111_delete_line(Line * L){
     
     //all
 	if(L->all != NULL)
@@ -67,12 +67,12 @@ void pass1_delete_line(Line * L){
 		
 	free(L);	
 
-}//end of pass1_init_line function
+}//end of p111_init_line function
 
 
 
 /* used to writing erroMesg into Line-object */
-void pass1_write_mesg(Line * L, char * mesg){
+void p112_write_mesg(Line * L, char * mesg){
 	
 	if(L->eroMesg == NULL){
 		L->eroMesg = malloc( sizeof(char) * (ERROR_LEN  + 1) );
@@ -80,12 +80,12 @@ void pass1_write_mesg(Line * L, char * mesg){
 	}
 	
 	strcat(L->eroMesg, mesg);
-}//end of pass1_write_mesg function
+}//end of p112_write_mesg function
 
 
 
 /* used to divied the pgm-line into 3 part, 1.lable 2.code 3.oprent */
-void pass1_divi_in3part(Line * L){
+void p113_divi_in3part(Line * L){
 
 	//to record the char address in 
 	char * tab1          = NULL;
@@ -103,7 +103,7 @@ void pass1_divi_in3part(Line * L){
 		user maybe write enter in this line*/
 	if(tab1 == 0){
 
-		pass1_write_mesg(L, "-< this line is illegal >-");
+		p112_write_mesg(L, "-< this line is illegal >-");
 		return;
 		
 	}else if(tab1 == L->all){//means first char is tab, no lable
@@ -167,7 +167,12 @@ void pass1_divi_in3part(Line * L){
 	printf("a:%x\n", L->all);
 	#endif
 
-}//end of pass1_frag_to3part function
+}//end of p113_frag_to3part function
+
+
+
+
+
 
 
 
@@ -175,13 +180,13 @@ void pass1_divi_in3part(Line * L){
 if this code can not be found in Tables
 set "subscript" value be ERROR_VALUE
 */
-void pass1_find_code_in_table(Line * L){
+void p114_find_code_in_table(Line * L){
     char     * temp      = NULL;       
 	unsigned   subscript = 0;
 	
 	temp = L->code;
 	//find in opTable
-	subscript = pass1_find_opcode(temp);
+	subscript = p010_find_opcode(temp);
 	
 	if(subscript != ERROR_VALUE){
 	    
@@ -191,7 +196,7 @@ void pass1_find_code_in_table(Line * L){
     }else{
         
         //find in pseudoTable
-        subscript = pass1_find_pi(temp);
+        subscript = p011_find_pi(temp);
         if(subscript != ERROR_VALUE){
 	    
 	       subscript = subscript + PI_BASE;
@@ -200,13 +205,131 @@ void pass1_find_code_in_table(Line * L){
      	    
      	    L->subscript  = ERROR_VALUE;
  	        L->locctr     = 0xFFFF;
-	        pass1_write_mesg(L, "-< opcode or picode is illegal >-");
+	        p112_write_mesg(L, "-< opcode or picode is illegal >-");
        }
         
     }//if(subscript != ERROR_VALUE)
 	
 	
 	
-}//end of pass1_find_in_table function
+}//end of p114_find_in_table function
+
+
+
+
+
+
+/* processing the infor of pseudo instruction */
+unsigned p115_process_picode(Line * L){
+	
+	unsigned  shiftLoc = 0;
+	unsigned  objLen   = 0;
+	char      oprent   [OPRENT_LEN + 1 ];
+	
+	//init oprent
+	memset(oprent,      '\0', sizeof(oprent  ));
+    strcpy(oprent, L->oprent);
+    
+    
+    //process BYTE instruction
+    if(L->subscript - PI_BASE == BYTE){
+        
+        objLen = strlen(oprent);
+        char *temp = NULL;
+ 
+        //init temp
+        temp = malloc( sizeof(char) * ( (objLen - 3)+ 1) );
+        memset(temp,  '\0', sizeof(temp));
+        
+        /* EOF    BYTE    C'EOF'
+            oprent = C'EOF'
+            temp = EOF
+            
+            INPUT    BYTE    X'F1'
+            oprent = X'F1'
+            temp = F1
+        */
+        strncpy(temp, (char *)(&oprent[2]), objLen -3 );
+        
+        
+        if(oprent[0] == 'C'){
+            
+            L->ascii = temp;
+            //one character is one byte in memory
+            shiftLoc = strlen(temp) * 2;
+            
+        }else if(oprent[0] == 'X'){
+            
+            L->bytes = temp;
+            //two hex words are one byte in memory
+            shiftLoc = strlen(temp) / 2;
+        }//end of if(oprent[0] == 'C')
+       
+   
+   
+   
+    //process the other three instruction WORD RESB RESW
+    }else{
+        
+        unsigned  intValue = 0;
+	    char      strValue [OPRENT_LEN + 1 ];
+        
+        //init strValue
+	    memset(strValue,    '\0', sizeof(strValue));
+        
+        //turn the hex-value into dec-value
+        if(oprent[0] == 'X'){
+    	    
+    	    objLen = strlen(oprent);
+    	    
+    	    //copy the hex words into strValue
+    	    strncpy(strValue, (char *)(&L->oprent[2]), objLen -3 );
+    	    
+    	    //turn the hex-value into dec-value
+    	    intValue = p000_hex2dec(strValue);
+            
+        }else{
+            
+            intValue = (unsigned)atoi(oprent);
+        }//end of if(oprent[0] == 'X')
+            
+        
+        
+        //each intrustion had own process way
+        switch(L->subscript - PI_BASE){
+    	    
+            case WORD:
+                //WORD generate a 3-bytes objCode 
+                L->format3 = p010_init_format3(intValue);
+                shiftLoc = 3;
+                break;
+    	        
+            case RESB:
+                
+                shiftLoc = intValue;
+                break;
+                
+            case RESW:
+                
+                shiftLoc = intValue * 3;
+                break;
+           
+           case END:
+                
+                shiftLoc = 0;
+                break;
+                
+           default:
+               p112_write_mesg(L, "-< Error in  pass1_process_picode(Line * L)>-");
+                
+        }//end of switch
+	
+        
+    }//end of if(L->subscript - PI_BASE == BYTE)
+    
+	
+	return shiftLoc;
+}//end of p115_process_picode function
+
 
 
