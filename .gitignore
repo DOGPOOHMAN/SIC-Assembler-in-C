@@ -1,3 +1,6 @@
 test/
 *.exe
 objpgm.txt
+report/
+*.rar
+
