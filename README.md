@@ -1,3 +1,16 @@
+[pgrmhead]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/pgrmhead.c "pgrmhead.c"
+[sic_build_itmfile]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_build_itmfile.c "sic_build_itmfile.c"
+[sic_line]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_line.c "sic_line.c"
+[sic_format3]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_format3.c "sic_format3.c"
+[sic_hex_to_dec]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_hex_to_dec.c "sic_hex_to_dec.c"
+[sic_find_tables]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_find_tables.c "sic_find_tables.c"
+[sic_open_sicpgrm]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_open_sicpgrm.c "sic_open_sicpgrm.c"
+[sic_build_itmfile_functions]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_build_itmfile_functions.c "sic_build_itmfile_functions.c"
+[sic_gener_f3]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_gener_f3.c "sic_gener_f3.c"
+[sic_output_objpgm]: https://github.com/DOGPOOHMAN/SIC-Assembler-in-C/blob/master/sic_output_objpgm.c "sic_output_objpgm.c"
+
+
+
 1.在我的程式碼，以及這份文件中
 ----------------------------
 * Oprent		等同於 Operand
@@ -41,54 +54,54 @@
    
    這麼做是為了減少程式出錯，提高程式的穩定性，就算使用者輸入的sic-program，是錯誤的，程式也能順利執行，並且亮出錯誤訊息，
    (錯誤訊息也被儲存在，結構(Line)裡面的(char * eroMesg)變數中)，使用者能針對錯誤訊息，修改自己的程式。  
-
+   
 #### 觀看程式碼:  
->  結構(Line)的定義( pgrmhead.c :: 113 )  
->  讀入一道指令，建立結構( sic_build_itmfile.c :: 43 )  
->  拆解指令成三個部分( sic_line.c :: 88 )  
->  在結構中寫入錯誤訊息( sic_line.c :: 75 )  
+>  結構(Line)的定義( [pgrmhead.c :: 113][pgrmhead] )  
+>  讀入一道指令，建立結構( [sic_build_itmfile.c :: 43][sic_build_itmfile] )  
+>  拆解指令成三個部分( [sic_line.c :: 88][sic_line] )  
+>  在結構中寫入錯誤訊息( [sic_line.c :: 75][sic_line] )  
 
 6.記憶體控管
 ------------
 當初設計這一支程式時，就針對記憶體的管理特別設計，使用結構指標陣，當結構需要被使用時，才動態配置結構陣列，包括結構中的字串變數，也是需要被使用時，才動態配置出來的，這麼做為了程式執行時，盡量減少記憶體使用率。
 
 #### 觀看程式碼:  
->  動態配置結構(Line) ( sic_line.c :: 2 )  
->  動態配置結構(Format3) ( sic_format3.c :: 2 )  
+>  動態配置結構(Line) ( [sic_line.c :: 2][sic_line] )  
+>  動態配置結構(Format3) ( [sic_format3.c :: 2][sic_format3] )  
 
 
 7.程式結構
 ---------
-* A.	Assembler 共用function( sic_hex_to_dec.c   sic_find_tables.c )
+* A.	Assembler 共用function( [sic_hex_to_dec.c][sic_hex_to_dec]-----[sic_find_tables.c][sic_find_tables] )
     * p000_hex2dec(char * math) : unsigned
     * p010_find_opcode(char * temp) : unsigned
     * p011_find_pi(char * temp) : unsigned
     * p012_find_sym(SYMTABLE *Syms, char * temp) : unsigned
 
 * B.	用來記錄以及產生Format3的objcode  
-(屬於結構Format3底下的function) ( sic_format3.c )
+(屬於結構Format3底下的function) ( [sic_format3.c][sic_format3] )
   * p010_init_format3(unsigned value) : Format3 *
   * p011_delete_format3(Format3 * c) : void
   * p012_calcu_format3(Format3 * c) : void
 
 * C.	用來記錄sic-program的每一行以及更進一步的處理
-(屬於結構Line底下的function) ( sic_line.c )
+(屬於結構Line底下的function) ( [sic_line.c][sic_line] )
 	* p110_init_line(char * allLine) : Line *
 	* p111_delete_line(Line * L) : void
 	* p113_divi_in3part(Line * L) : void
 	* p114_find_code_in_table(Line * L) : void
 	* p115_process_picode(Line * L) : unsigned
 
-* D.	用來開啟sic-program file( sic_open_sicpgrm.c )
+* D.	用來開啟sic-program file( [sic_open_sicpgrm.c][sic_open_sicpgrm] )
   * p120_open_sicpgrm(void) : FILE *
 
-* E.	建立以及產生中介資料( sic_build_itmfile.c )
+* E.	建立以及產生中介資料( [sic_build_itmfile.c][sic_build_itmfile] )
   * p130_built_itmfile(FILE * sicPgrm, SYMTABLE * Syms, Line ** Lines, INFOR * infor) : void
 
-* F.	檢查是否是註解行( sic_build_itmfile_functions.c )
+* F.	檢查是否是註解行( [sic_build_itmfile_functions.c][sic_build_itmfile_functions] )
   * p131_isit_comment(char * allLine) : short
 
-* G.	產生以及輸出object-program( sic_gener_f3.c   sic_output_objpgm.c )
+* G.	產生以及輸出object-program( [sic_gener_f3.c][sic_gener_f3]-----[sic_output_objpgm.c][sic_output_objpgm] )
   * p200_gener_f3_objcode(SYMTABLE * Syms, Line ** Lines, unsigned countLines) : void
   * p210_output_objpgrm(SYMTABLE * Syms, Line ** Lines, INFOR * infor) : void
   
