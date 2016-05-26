@@ -31,7 +31,33 @@
 程式會指出哪一行出現語法錯誤，指示使用者修改，   
 使的使用者能改進自己的sic-program。
 
-5.程式結構
+
+  
+5.架構
+------
+   使用結構(Line)來儲存sic-program的每一道指令，相關的資訊也都會被儲存在結構(Line)中。 
+
+   程式讀入一道指令之後，會為這一到指令建立一個Line結構，把整行指令儲存在(char * all)變數，接著再把整行指令拆解成三個部分，lable, opCode, oprent，如果該指令沒有lable，結構中的(char * lable)變數，就會是NULL，其他兩個opCode and oprent變數，以此類推。  
+   
+   這麼做是為了減少程式出錯，提高程式的穩定性，就算使用者輸入的sic-program，是錯誤的，程式也能順利執行，並且亮出錯誤訊息，
+   (錯誤訊息也被儲存在，結構(Line)裡面的(char * eroMesg)變數中)，使用者能針對錯誤訊息，修改自己的程式。  
+
+#### 觀看程式碼:  
+>  結構(Line)的定義( pgrmhead.c :: 113 )  
+>  讀入一道指令，建立結構( sic_build_itmfile.c :: 43 )  
+>  拆解指令成三個部分( sic_line.c :: 88 )  
+>  在結構中寫入錯誤訊息( sic_line.c :: 75 )  
+
+6.記憶體控管
+------------
+當初設計這一支程式時，就針對記憶體的管理特別設計，使用結構指標陣，當結構需要被使用時，才動態配置結構陣列，包括結構中的字串變數，也是需要被使用時，才動態配置出來的，這麼做為了程式執行時，盡量減少記憶體使用率。
+
+#### 觀看程式碼:  
+>  動態配置結構(Line) ( sic_line.c :: 2 )  
+>  動態配置結構(Format3) ( sic_format3.c :: 2 )  
+
+
+7.程式結構
 ---------
 * A.	Assembler 共用function( sic_hex_to_dec.c   sic_find_tables.c )
     * p000_hex2dec(char * math) : unsigned
@@ -65,4 +91,4 @@
 * G.	產生以及輸出object-program( sic_gener_f3.c   sic_output_objpgm.c )
   * p200_gener_f3_objcode(SYMTABLE * Syms, Line ** Lines, unsigned countLines) : void
   * p210_output_objpgrm(SYMTABLE * Syms, Line ** Lines, INFOR * infor) : void
-
+  
